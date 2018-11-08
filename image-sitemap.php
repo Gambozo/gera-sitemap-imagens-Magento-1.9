@@ -14,7 +14,6 @@ $collection = Mage::getModel('catalog/product')
 $dom = new DOMDocument("1.0", "UTF-8");
 $dom->preserveWhiteSpace = false;
 $dom->formatOutput = true;
-$dom->formatOutput = true;
 #Cria nó raiz com namespace
 $root = $dom->createElement("urlset");
 $root->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
