@@ -8,6 +8,7 @@ $noImage = "catalog/product/no_selection";
 #armazena atributos de produtos em uma coleção
 $collection = Mage::getModel('catalog/product')
     ->getCollection()
+    ->addAttributeToFilter('status', array('eq' => 1)) //Filtra produtos ativos
     ->addAttributeToFilter('image', array('notnull' => '', 'neq' => 'no_selection'))
     ->setStoreId(1)
     ->addUrlRewrite();
@@ -54,7 +55,6 @@ function addContato($document, $urlloc, $loc, $lastmod)
 }
 foreach ($collection as $product) {
     $ImgLoc = $product->getUrlInStore(array('_ignore_category' => true));
-    //Mage::getModel('catalog/product_media_config')->getMediaUrl($product->getProductUrl());
     $updatedAt = substr($product->getUpdatedAt(), 0, 10);
     $image = Mage::getModel('catalog/product_media_config')->getMediaUrl($product->getImage());
     if ($image != ($base_url . $noImage)) {
