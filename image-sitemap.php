@@ -22,9 +22,9 @@ $root->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', 'http://www.site
 $root->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:image', 'http://www.google.com/schemas/sitemap-image/1.1');
 
 #adiciona nós com dados das imagens
-function addContato($document, $urlloc, $loc, $lastmod)
+function addImage($document, $urlloc, $loc, $lastmod)
 {
-    #criar contato
+    #criar nó de produto
     $urlset = $document->createElement("url");
     #criar nó location
     $locElm = $document->createElement("loc", $urlloc);
@@ -55,7 +55,7 @@ foreach ($collection as $product) {
     $image = $rootUrl . $product->getImage();
     if ($image != ($base_url . $noImage)) {
         #utilizando a funcao para criar contatos adicionando no root
-        $urlset = addContato($dom, $ImgLoc, $image, $updatedAt);
+        $urlset = addImage($dom, $ImgLoc, $image, $updatedAt);
         $root->appendChild($urlset);
         $dom->appendChild($root);
     }
