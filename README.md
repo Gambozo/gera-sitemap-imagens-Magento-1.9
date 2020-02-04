@@ -8,12 +8,14 @@ Colocar na raiz do Magento (não é necessário configurar quaisquer opções).
 O script salva o XML para ser usado na raíz do site:
 https://www.seusite.com/sitemap-image.xml
 
+Caso haja necessidade de atualizar em períodos de tempo, recomendo configurar um CRON para executá-lo.
+
 O script gera uma estrutura como esta:
 ```
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
    <url>
      <loc>
-          httpX://www.seusite.com/media/catalog/product/x/p/xproduto.jpg
+          httpX://www.seusite.com/seu-produto.html
      </loc>
      <lastmod>2017-09-01</lastmod>
      <changefreq>daily</changefreq>
