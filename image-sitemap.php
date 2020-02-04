@@ -5,25 +5,21 @@ require $mageFileName;
 Mage::app();
 $base_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
 $noImage = "catalog/product/no_selection";
+$rootUrl = Mage::getBaseUrl() . 'media/catalog/product'; //Uso da URL base evita erros de rastreamento se utilizar CDN
 #armazena atributos de produtos em uma coleção
 $collection = Mage::getModel('catalog/product')
     ->getCollection()
     ->addAttributeToFilter('status', array('eq' => 1)) //Filtra produtos ativos
     ->addAttributeToFilter('image', array('notnull' => '', 'neq' => 'no_selection'))
-    ->setStoreId(1)
-    ->addUrlRewrite();
+    ->setStoreId(1);
 #criaobjeto DOM
 $dom = new DOMDocument("1.0", "UTF-8");
 $dom->preserveWhiteSpace = false;
 $dom->formatOutput = true;
 #Cria nó raiz com namespace
 $root = $dom->createElement("urlset");
-$root->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-$root->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:image', 'http://www.google.com/schemas/sitemap-image/1.1');
-$root->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:schemaLocation', 'http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd');
 $root->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
-
-#xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
+$root->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:image', 'http://www.google.com/schemas/sitemap-image/1.1');
 
 #adiciona nós com dados das imagens
 function addContato($document, $urlloc, $loc, $lastmod)
@@ -54,9 +50,9 @@ function addContato($document, $urlloc, $loc, $lastmod)
     return $urlset;
 }
 foreach ($collection as $product) {
-    $ImgLoc = $product->getUrlInStore(array('_ignore_category' => true));
+    $ImgLoc = $product->getProductUrl();
     $updatedAt = substr($product->getUpdatedAt(), 0, 10);
-    $image = Mage::getModel('catalog/product_media_config')->getMediaUrl($product->getImage());
+    $image = $rootUrl . $product->getImage();
     if ($image != ($base_url . $noImage)) {
         #utilizando a funcao para criar contatos adicionando no root
         $urlset = addContato($dom, $ImgLoc, $image, $updatedAt);
@@ -71,4 +67,3 @@ $dom->save("sitemap-image.xml");
 #mostrar dados na tela
 header("Content-Type: text/xml");
 print $dom->saveXML();
-?>
